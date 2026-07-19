@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Елена Ростова | Премиальная недвижимость</title>
+    <meta name="description" content="Эксклюзивные услуги в сфере элитной недвижимости. Откройте для себя роскошные пентхаусы, виллы и загородные резиденции.">
+    
+    <!-- Google Fonts: Playfair Display (Serif) & Inter (Sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600&family=Playfair+Display:ital,wght=0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- PapaParse для парсинга Google Таблицы в формате CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        pearl: '#F5F6F8',
+                        gold: '#D4AF37',
+                        'gold-light': '#E8D08D',
+                        rose: '#E8C5C8',
+                        'rose-light': '#F3E1E3',
+                        charcoal: '#2D2D2D',
+                        'charcoal-light': '#4A4A4A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Кастомный премиальный скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c29f2f;
+        }
+
+        /* Навигационная панель с эффектом размытия заднего фона */
+        .glass-nav {
+            background: rgba(253, 251, 247, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #2D2D2D 0%, #4A4A4A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #D4AF37 0%, #E8D08D 100%);
+        }
+
+        /* Плавные переходы для изображений в слайдерах */
+        .carousel-item {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .carousel-item.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* Эффект проявления при прокрутке страницы */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Стилизация активных радио-кнопок в квизе */
+        .quiz-option input[type="radio"]:checked + div {
+            border-color: #D4AF37;
+            background-color: #FDFBF7;
+            box-shadow: 0 4px 14px rgba(212, 175, 55, 0.15);
+        }
+        .quiz-option input[type="radio"]:checked + div .check-icon {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-cream text-charcoal font-sans antialiased overflow-x-hidden">
+
+    <!-- 1. Элегантная шапка (Хедер) -->
+    <header class="fixed top-0 w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div id="navbar-container" class="flex justify-between items-center h-24 transition-all duration-300">
+                <!-- Логотип -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <span class="font-serif text-2xl tracking-wider text-charcoal font-semibold">ELENA<span class="text-gold">.</span>ROSTOVA</span>
+                </div>
+                
+                <!-- Десктопное меню -->
+                <nav class="hidden md:flex space-x-10 items-center">
+                    <a href="#home" class="text-sm uppercase tracking-widest text-charcoal-light hover:text-gold transition-colors duration-300">Главная</a>
+                    <a href="#about" class="text-sm uppercase tracking-widest text-charcoal-light hover:text-gold transition-colors duration-300">Обо мне</a>
+                    <a href="#properties" class="text-sm uppercase tracking-widest text-charcoal-light hover:text-gold transition-colors duration-300">Каталог</a>
+                    <a href="#testimonials" class="text-sm uppercase tracking-widest text-charcoal-light hover:text-gold transition-colors duration-300">Отзывы</a>
+                </nav>
+
+                <!-- Кнопка призыва к действию -->
+                <div class="hidden md:flex">
+                    <a href="#quiz" class="px-6 py-3 border border-gold text-gold hover:bg-gold hover:text-white text-sm uppercase tracking-widest transition-all duration-300 rounded-sm">
+                        Подобрать дом
+                    </a>
+                </div>
+
+                <!-- Кнопка мобильного меню -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-charcoal hover:text-gold focus:outline-none p-2" aria-label="Открыть меню">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Мобильное выпадающее меню -->
+        <div id="mobile-menu" class="md:hidden hidden bg-cream border-t border-gold/20 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-6 space-y-2 text-center">
+                <a href="#home" class="block px-3 py-4 text-base uppercase tracking-widest text-charcoal hover:text-gold hover:bg-rose-light/20">Главная</a>
+                <a href="#about" class="block px-3 py-4 text-base uppercase tracking-widest text-charcoal hover:text-gold hover:bg-rose-light/20">Обо мне</a>
+                <a href="#properties" class="block px-3 py-4 text-base uppercase tracking-widest text-charcoal hover:text-gold hover:bg-rose-light/20">Каталог</a>
+                <a href="#testimonials" class="block px-3 py-4 text-base uppercase tracking-widest text-charcoal hover:text-gold hover:bg-rose-light/20">Отзывы</a>
+                <a href="#quiz" class="block mt-4 px-3 py-4 text-base uppercase tracking-widest text-white gold-gradient-bg mx-4 rounded-sm shadow-md">Связаться</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Главный экран (Hero Section) -->
+    <section id="home" class="relative min-h-screen flex items-center pt-24 overflow-hidden">
+        <!-- Декоративные фоновые элементы -->
+        <div class="absolute top-[-10%] right-[-5%] w-[50%] h-[70%] bg-rose/20 rounded-full blur-[120px] -z-10"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[40%] h-[50%] bg-gold/10 rounded-full blur-[100px] -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 relative z-10 py-12 lg:py-0">
+            
+            <!-- Левая колонка: Типографика и введение -->
+            <div class="w-full lg:w-5/12 flex flex-col items-center lg:items-start text-center lg:text-left space-y-8 animate-fade-in-up">
+                <div class="inline-flex items-center space-x-3 px-4 py-2 border border-rose rounded-full bg-rose-light/30">
+                    <i class="fa-solid fa-star text-gold text-xs"></i>
+                    <span class="text-xs uppercase tracking-[0.2em] font-medium text-charcoal">Топ-1% брокеров элитной недвижимости</span>
+                </div>
+                
+                <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.1] text-charcoal">
+                    Искусство <br />
+                    <span class="italic text-gold">исключительной</span> <br />
+                    жизни.
+                </h1>
+                
+                <p class="text-charcoal-light font-light text-lg sm:text-xl leading-relaxed max-w-lg">
+                    Откройте для себя непревзойденную элитную недвижимость с ведущим экспертом Москвы. Уникальные дома для особенных людей.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 pt-4 w-full justify-center lg:justify-start">
+                    <a href="#properties" class="gold-gradient-bg text-white px-8 py-4 uppercase tracking-widest text-sm font-medium hover:shadow-lg hover:shadow-gold/30 transition-all duration-300 rounded-sm text-center">
+                        Смотреть коллекцию
+                    </a>
+                    <a href="#about" class="px-8 py-4 border border-charcoal/20 text-charcoal uppercase tracking-widest text-sm font-medium hover:border-gold hover:text-gold transition-all duration-300 rounded-sm text-center">
+                        Обо мне
+                    </a>
+                </div>
+                
+                <!-- Статистика брокера -->
+                <div class="grid grid-cols-3 gap-4 sm:gap-8 pt-10 border-t border-charcoal/10 w-full">
+                    <div>
+                        <p class="font-serif text-2xl sm:text-3xl text-charcoal">15+ млрд ₽</p>
+                        <p class="text-[10px] sm:text-xs uppercase tracking-widest text-charcoal-light mt-1">Объем сделок</p>
+                    </div>
+                    <div>
+                        <p class="font-serif text-2xl sm:text-3xl text-charcoal">12</p>
+                        <p class="text-[10px] sm:text-xs uppercase tracking-widest text-charcoal-light mt-1">Лет опыта</p>
+                    </div>
+                    <div>
+                        <p class="font-serif text-2xl sm:text-3xl text-charcoal">200+</p>
+                        <p class="text-[10px] sm:text-xs uppercase tracking-widest text-charcoal-light mt-1">Довольных семей</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая колонка: REALTOR_PHOTO_1 -->
+            <div class="w-full lg:w-7/12 relative animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div class="relative w-full max-w-lg mx-auto lg:max-w-none lg:ml-auto px-4 sm:px-0">
+                    <!-- Смещенные декоративные рамки -->
+                    <div class="absolute -top-4 -right-4 w-full h-full border border-gold rounded-t-full rounded-bl-full z-0 hidden sm:block"></div>
+                    <div class="absolute -bottom-4 -left-4 w-full h-full bg-rose-light/50 rounded-b-full rounded-tr-full z-0 hidden sm:block"></div>
+                    
+                    <!-- Главная фотография с автозаменой в случае ошибки -->
+                    <div class="relative z-10 w-full overflow-hidden rounded-t-full rounded-b-[40px] shadow-2xl shadow-charcoal/10 aspect-[4/5] bg-pearl">
+                        <img 
+                            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" 
+                            onerror="this.src='https://placehold.co/800x1000/F5F6F8/2D2D2D?text=Elena+Rostova+Broker'"
+                            alt="Елена Ростова Главный Портрет" 
+                            class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-1000"
+                        >
+                        <!-- Панель поверх изображения -->
+                        <div class="absolute bottom-6 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 bg-white/90 backdrop-blur px-4 py-3 sm:px-6 sm:py-4 rounded-xl shadow-lg border border-white flex items-center justify-between">
+                            <div>
+                                <p class="text-xs sm:text-sm font-semibold text-charcoal">Елена Ростова</p>
+                                <p class="text-[10px] sm:text-xs text-charcoal-light">Основатель и ведущий брокер</p>
+                            </div>
+                            <a href="#quiz" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-rose-light flex items-center justify-center text-charcoal hover:bg-gold hover:text-white transition-colors duration-300">
+                                <i class="fa-solid fa-arrow-right -rotate-45 text-xs sm:text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Блок личного бренда / Обо мне (Personal Brand / About Section) -->
+    <section id="about" class="py-24 bg-white relative z-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                
+                <!-- REALTOR_PHOTO_2 -->
+                <div class="w-full lg:w-1/2 relative reveal px-4 sm:px-0">
+                    <div class="relative inline-block w-full">
+                        <div class="absolute inset-0 bg-gold/10 transform translate-x-4 translate-y-4 rounded-sm -z-10"></div>
+                        <img 
+                            src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=800" 
+                            onerror="this.src='https://placehold.co/600x800/FDFBF7/2D2D2D?text=Elena+Editorial'"
+                            alt="Елена Ростова Портрет в интерьере" 
+                            class="w-full h-auto aspect-[3/4] object-cover shadow-lg rounded-sm"
+                        >
+                        <!-- Плашка с опытом работы -->
+                        <div class="absolute -left-4 top-12 bg-charcoal text-white py-3 px-5 sm:py-4 sm:px-6 shadow-xl rounded-sm hidden sm:block">
+                            <p class="font-serif text-3xl sm:text-4xl text-gold mb-1">12+</p>
+                            <p class="text-[10px] sm:text-xs uppercase tracking-widest text-pearl">Лет в сфере<br>элитной недвижимости</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Биографическое описание -->
+                <div class="w-full lg:w-1/2 flex flex-col space-y-8 reveal">
+                    <div>
+                        <h4 class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">О Брокере</h4>
+                        <h2 class="font-serif text-4xl md:text-5xl text-charcoal leading-tight">Возводя поиск недвижимости в ранг искусства.</h2>
+                    </div>
+                    
+                    <p class="text-charcoal-light font-light leading-relaxed text-base sm:text-lg">
+                        Покупка идеального дома — это не просто сделка. Это начало новой, прекрасной главы вашей жизни. Более десяти лет я посвящаю себя тому, чтобы предоставлять безупречный индивидуальный сервис для самых взыскательных клиентов.
+                    </p>
+                    <p class="text-charcoal-light font-light leading-relaxed text-base sm:text-lg">
+                        Мой подход сочетает в себе глубочайшее знание рынка и абсолютные стандарты премиального сервиса. От роскошных пентхаусов до уединенных загородных резиденций — я подбираю объекты, идеально соответствующие вашему стилю жизни и инвестиционным целям.
+                    </p>
+                    
+                    <!-- Личная цитата и подпись -->
+                    <div class="pl-6 border-l-2 border-gold pt-2 pb-2 my-4 bg-cream/50">
+                        <p class="font-serif italic text-lg sm:text-xl text-charcoal mb-4">«Роскошь — это не цена; это опыт, внимание к деталям и стремление к абсолютному совершенству».</p>
+                        <div class="flex items-center gap-4">
+                            <p class="font-serif text-2xl text-charcoal/80" style="font-family: 'Playfair Display', serif; transform: rotate(-3deg);">Е. Ростова</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <a href="#quiz" class="inline-flex items-center gap-2 text-charcoal hover:text-gold uppercase tracking-widest text-sm font-semibold transition-colors duration-300">
+                            Сотрудничать со мной <i class="fa-solid fa-arrow-right text-gold"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Каталог недвижимости (Property Catalog Section) -->
+    <section id="properties" class="py-28 bg-cream border-t border-rose-light/50 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            
+            <!-- Заголовок раздела -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal">
+                <div class="max-w-2xl">
+                    <h4 class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Эксклюзивные предложения</h4>
+                    <h2 class="font-serif text-4xl md:text-5xl text-charcoal">Авторская коллекция</h2>
+                </div>
+                <div class="mt-6 md:mt-0">
+                    <a href="#quiz" class="px-6 py-3 border border-charcoal/20 text-charcoal hover:border-gold hover:text-gold uppercase tracking-widest text-sm font-medium transition-all duration-300 rounded-sm inline-block">
+                        Подобрать объект
+                    </a>
+                </div>
+            </div>
+
+            <!-- Сетка объектов (Подгружается динамически из Google Таблицы) -->
+            <div id="catalog-container" class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Скелетон загрузки данных -->
+                <div class="col-span-1 md:col-span-2 text-center py-20 bg-white rounded-2xl border border-rose-light/30 shadow-sm">
+                    <i class="fa-solid fa-spinner fa-spin text-4xl text-gold mb-4"></i>
+                    <p class="text-charcoal-light font-light text-base uppercase tracking-wider">Синхронизация каталога с Google Таблицей...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Промежуточный баннер доверия (Intermediary Trust Banner) -->
+    <section class="relative py-32 bg-rose overflow-hidden">
+        <!-- Текстурный декоративный фон -->
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#2D2D2D 1px, transparent 1px); background-size: 30px 30px;"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center gap-12 lg:gap-24">
+            <!-- Текстовый блок -->
+            <div class="w-full md:w-1/2 text-charcoal space-y-6 reveal">
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight text-white drop-shadow-sm">
+                    Готовы обрести свой <span class="italic text-charcoal">идеальный дом?</span>
+                </h2>
+                <p class="text-charcoal/80 text-base sm:text-lg md:text-xl font-light max-w-lg">
+                    Свяжитесь со мной напрямую, чтобы обсудить закрытые продажи, подобранные исключительно под ваш изысканный вкус.
+                </p>
+                <div class="pt-4">
+                    <a href="https://t.me/example_realtor" target="_blank" class="inline-flex items-center gap-3 bg-charcoal text-white px-8 py-4 uppercase tracking-widest text-sm font-medium hover:bg-gold transition-colors duration-300 rounded-sm shadow-xl">
+                        <i class="fa-brands fa-telegram text-xl"></i> Написать в Telegram
+                    </a>
+                </div>
+            </div>
+
+            <!-- Изображение REALTOR_PHOTO_3 (Приветственный кадр) -->
+            <div class="w-full md:w-1/2 reveal">
+                <div class="relative w-full max-w-xs sm:max-w-md mx-auto aspect-square overflow-hidden rounded-full border-8 border-rose-light/50 shadow-2xl">
+                    <img 
+                        src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" 
+                        onerror="this.src='https://placehold.co/600x600/E8C5C8/2D2D2D?text=Elena+Action+Shot'"
+                        alt="Елена Ростова Приветственное Фото" 
+                        class="w-full h-full object-cover object-top"
+                    >
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Отзывы (Testimonials / Reviews Section) -->
+    <section id="testimonials" class="py-28 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h4 class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Истории успеха клиентов</h4>
+                <h2 class="font-serif text-4xl md:text-5xl text-charcoal">Наследие доверия</h2>
+            </div>
+
+            <!-- Мозаичная сетка отзывов (Подгружается динамически из Google Таблицы) -->
+            <div id="reviews-container" class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+                <!-- Скелетон загрузки отзывов -->
+                <div class="w-full text-center py-12 bg-cream rounded-xl border border-rose-light/40">
+                    <i class="fa-solid fa-circle-notch fa-spin text-3xl text-gold mb-3"></i>
+                    <p class="text-charcoal-light font-light text-sm uppercase tracking-widest">Синхронизация отзывов клиентов...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Интерактивный квиз подбора недвижимости (Interactive Lead Quiz) -->
+    <section id="quiz" class="py-28 bg-rose-light/20 border-t border-rose-light">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h4 class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Подбор объекта</h4>
+                <h2 class="font-serif text-4xl text-charcoal mb-4">Найдите свой идеальный дом</h2>
+                <p class="text-charcoal-light">Пройдите короткий опрос, чтобы я могла составить для вас персональную подборку.</p>
+            </div>
+
+            <!-- Контейнер квиза -->
+            <div class="bg-white rounded-2xl shadow-xl shadow-charcoal/5 p-6 md:p-12 border border-rose-light/50 reveal">
+                
+                <!-- Прогресс-бар -->
+                <div class="w-full bg-pearl h-2 rounded-full mb-10 overflow-hidden">
+                    <div id="quiz-progress" class="bg-gold h-full rounded-full transition-all duration-500 w-1/3"></div>
+                </div>
+
+                <!-- Шаг 1: Бюджет -->
+                <div id="step-1" class="quiz-step animate-fade-in">
+                    <h3 class="font-serif text-xl sm:text-2xl text-charcoal mb-8 text-center">Каков ваш планируемый бюджет?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="budget" value="до 5 000 000 ₽" class="hidden peer" onchange="nextStep(1)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 text-center hover:border-gold transition-all duration-300">
+                                <span class="text-base sm:text-lg font-semibold text-charcoal block mb-1">до 5 млн ₽</span>
+                                <span class="text-[10px] sm:text-xs text-charcoal-light uppercase tracking-widest">Премиум</span>
+                                <div class="check-icon opacity-0 absolute top-4 right-4 text-gold transition-opacity duration-300">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="budget" value="5 000 000 ₽ - 20 000 000 ₽" class="hidden peer" onchange="nextStep(1)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 text-center hover:border-gold transition-all duration-300">
+                                <span class="text-base sm:text-lg font-semibold text-charcoal block mb-1">5 - 20 млн ₽</span>
+                                <span class="text-[10px] sm:text-xs text-charcoal-light uppercase tracking-widest">Люкс</span>
+                                <div class="check-icon opacity-0 absolute top-4 right-4 text-gold transition-opacity duration-300">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="budget" value="от 20 000 000 ₽" class="hidden peer" onchange="nextStep(1)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 text-center hover:border-gold transition-all duration-300">
+                                <span class="text-base sm:text-lg font-semibold text-charcoal block mb-1">от 20 млн ₽</span>
+                                <span class="text-[10px] sm:text-xs text-charcoal-light uppercase tracking-widest">Ультра-люкс</span>
+                                <div class="check-icon opacity-0 absolute top-4 right-4 text-gold transition-opacity duration-300">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Шаг 2: Тип недвижимости -->
+                <div id="step-2" class="quiz-step hidden">
+                    <h3 class="font-serif text-xl sm:text-2xl text-charcoal mb-8 text-center">Какой тип недвижимости вы ищете?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="type" value="Пентхаус" class="hidden peer" onchange="nextStep(2)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 flex items-center gap-4 hover:border-gold transition-all duration-300">
+                                <div class="w-12 h-12 bg-cream rounded-full flex items-center justify-center text-gold text-xl"><i class="fa-regular fa-building"></i></div>
+                                <span class="text-base sm:text-lg font-semibold text-charcoal">Пентхаус</span>
+                                <div class="check-icon opacity-0 ml-auto text-gold transition-opacity duration-300"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </label>
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="type" value="Загородная резиденция" class="hidden peer" onchange="nextStep(2)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 flex items-center gap-4 hover:border-gold transition-all duration-300">
+                                <div class="w-12 h-12 bg-cream rounded-full flex items-center justify-center text-gold text-xl"><i class="fa-solid fa-house-chimney"></i></div>
+                                <span class="text-base sm:text-lg font-semibold text-charcoal">Загородная резиденция</span>
+                                <div class="check-icon opacity-0 ml-auto text-gold transition-opacity duration-300"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </label>
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="type" value="Элитная квартира" class="hidden peer" onchange="nextStep(2)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 flex items-center gap-4 hover:border-gold transition-all duration-300">
+                                <div class="w-12 h-12 bg-cream rounded-full flex items-center justify-center text-gold text-xl"><i class="fa-solid fa-key"></i></div>
+                                <span class="text-base sm:text-lg font-semibold text-charcoal">Элитная квартира</span>
+                                <div class="check-icon opacity-0 ml-auto text-gold transition-opacity duration-300"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </label>
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="type" value="Инвестиции" class="hidden peer" onchange="nextStep(2)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 flex items-center gap-4 hover:border-gold transition-all duration-300">
+                                <div class="w-12 h-12 bg-cream rounded-full flex items-center justify-center text-gold text-xl"><i class="fa-solid fa-chart-line"></i></div>
+                                <span class="text-base sm:text-lg font-semibold text-charcoal">Инвестиции</span>
+                                <div class="check-icon opacity-0 ml-auto text-gold transition-opacity duration-300"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="mt-8 flex justify-between">
+                        <button class="text-charcoal-light hover:text-charcoal uppercase tracking-widest text-xs font-semibold" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left mr-2"></i> Назад</button>
+                    </div>
+                </div>
+
+                <!-- Шаг 3: Локация -->
+                <div id="step-3" class="quiz-step hidden">
+                    <h3 class="font-serif text-xl sm:text-2xl text-charcoal mb-8 text-center">Где должна располагаться недвижимость?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="location" value="Центр города" class="hidden peer" onchange="nextStep(3)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 text-center hover:border-gold transition-all duration-300">
+                                <span class="text-base sm:text-lg font-semibold text-charcoal block">Центр города</span>
+                                <div class="check-icon opacity-0 absolute top-4 right-4 text-gold transition-opacity duration-300"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </label>
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="location" value="Престижный пригород" class="hidden peer" onchange="nextStep(3)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 text-center hover:border-gold transition-all duration-300">
+                                <span class="text-base sm:text-lg font-semibold text-charcoal block">Престижный пригород</span>
+                                <div class="check-icon opacity-0 absolute top-4 right-4 text-gold transition-opacity duration-300"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </label>
+                        <label class="quiz-option cursor-pointer relative block">
+                            <input type="radio" name="location" value="У воды" class="hidden peer" onchange="nextStep(3)">
+                            <div class="border border-rose-light/60 rounded-xl p-6 text-center hover:border-gold transition-all duration-300">
+                                <span class="text-base sm:text-lg font-semibold text-charcoal block">У воды</span>
+                                <div class="check-icon opacity-0 absolute top-4 right-4 text-gold transition-opacity duration-300"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="mt-8 flex justify-between">
+                        <button class="text-charcoal-light hover:text-charcoal uppercase tracking-widest text-xs font-semibold" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left mr-2"></i> Назад</button>
+                    </div>
+                </div>
+
+                <!-- Шаг 4: Финальный экран анкеты -->
+                <div id="step-4" class="quiz-step hidden text-center">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-6">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl sm:text-3xl text-charcoal mb-4">Отлично! Ваша анкета заполнена.</h3>
+                    <p class="text-charcoal-light mb-8 max-w-lg mx-auto text-sm sm:text-base">На основе ваших ответов я подготовлю закрытую подборку объектов. Нажмите кнопку ниже, чтобы отправить ваши предпочтения мне напрямую в Telegram.</p>
+                    
+                    <a id="telegram-link" href="#" target="_blank" class="inline-block gold-gradient-bg text-white px-8 py-4 sm:px-10 sm:py-5 uppercase tracking-widest text-xs sm:text-sm font-semibold rounded-sm shadow-xl shadow-gold/20 hover:scale-105 transition-transform duration-300">
+                        <i class="fa-brands fa-telegram text-base sm:text-lg mr-2"></i> Отправить анкету Елене
+                    </a>
+                    
+                    <button class="block w-full mt-6 text-charcoal-light hover:text-charcoal text-xs uppercase tracking-widest" onclick="resetQuiz()">Начать сначала</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал сайта (Footer) -->
+    <footer class="bg-charcoal text-cream py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-white/10 pb-12">
+                <div class="md:col-span-2">
+                    <span class="font-serif text-2xl tracking-wider text-white font-semibold mb-6 block">ELENA<span class="text-gold">.</span>ROSTOVA</span>
+                    <p class="text-cream/60 font-light max-w-sm mb-6 leading-relaxed">
+                        Создаем исключительный стиль жизни благодаря персональному консалтингу в сфере элитной недвижимости в лучших локациях.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-gold hover:border-gold transition-colors" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://t.me/example_realtor" target="_blank" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-gold hover:border-gold transition-colors" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-gold hover:border-gold transition-colors" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="uppercase tracking-widest text-gold text-xs font-semibold mb-6">Разделы</h5>
+                    <ul class="space-y-4">
+                        <li><a href="#home" class="text-cream/70 hover:text-white text-sm transition-colors">Главная</a></li>
+                        <li><a href="#about" class="text-cream/70 hover:text-white text-sm transition-colors">Обо мне</a></li>
+                        <li><a href="#properties" class="text-cream/70 hover:text-white text-sm transition-colors">Каталог</a></li>
+                        <li><a href="#testimonials" class="text-cream/70 hover:text-white text-sm transition-colors">Отзывы</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="uppercase tracking-widest text-gold text-xs font-semibold mb-6">Контакты</h5>
+                    <ul class="space-y-4 text-sm text-cream/70">
+                        <li><i class="fa-solid fa-phone mr-2 text-gold"></i> +7 (495) 000-00-00</li>
+                        <li><i class="fa-solid fa-envelope mr-2 text-gold"></i> elena@rostova-realty.com</li>
+                        <li><i class="fa-solid fa-location-dot mr-2 text-gold"></i> Пресненская набережная 12, Москва</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-cream/40">
+                <p>&copy; 2026 Елена Ростова. Все права защищены.</p>
+                <div class="space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-cream">Политика конфиденциальности</a>
+                    <a href="#" class="hover:text-cream">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. ПЕРЕКЛЮЧАТЕЛЬ МОБИЛЬНОГО МЕНЮ ---
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // --- 2. ЭФФЕКТ УМЕНЬШЕНИЯ ШАПКИ ПРИ ПРОКРУТКЕ ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            const navContainer = document.getElementById('navbar-container');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-md', 'bg-cream/95');
+                nav.classList.remove('bg-cream/85');
+                navContainer.classList.replace('h-24', 'h-16');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-cream/95');
+                nav.classList.add('bg-cream/85');
+                navContainer.classList.replace('h-16', 'h-24');
+            }
+        });
+
+        // --- 3. ИНТЕГРАЦИЯ GOOGLE ТАБЛИЦЫ (CSV) ---
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRZZYT-QHrEwd62vJ4a8sRYmc2GrpneY7xm9VFGaSAIr8d8uXgrx0zKiERDXxSCrs0cZQ2RK_VthqGI/pub?gid=0&single=true&output=csv";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Асинхронно стягиваем данные через PapaParse
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    try {
+                        const parsedRows = results.data;
+                        buildPropertiesCatalog(parsedRows);
+                        buildClientReviews(parsedRows);
+                    } catch (e) {
+                        console.error("Ошибка при динамической обработке данных:", e);
+                        renderPlaceholdersOnError();
+                    }
+                },
+                error: function(err) {
+                    console.error("Не удалось подключиться к Google Sheet CSV:", err);
+                    renderPlaceholdersOnError();
+                }
+            });
+        });
+
+        // Вспомогательная функция очистки и форматирования цен в рубли
+        function formatPrice(rawPrice) {
+            if (!rawPrice) return 'Цену уточняйте';
+            // Оставляем только цифры
+            const cleaned = rawPrice.toString().replace(/\D/g, '');
+            if (!cleaned) return rawPrice; // Возвращаем исходную строку, если нет цифр
+            const num = parseInt(cleaned, 10);
+            return new Intl.NumberFormat('ru-RU').format(num) + ' ₽';
+        }
+
+        // --- 4. РЕНДЕР КАТАЛОГА ОБЪЕКТОВ (Колонки A-N) ---
+        function buildPropertiesCatalog(rows) {
+            const container = document.getElementById('catalog-container');
+            if (!container) return;
+
+            let htmlString = '';
+            let validCount = 0;
+
+            rows.forEach((row, index) => {
+                try {
+                    // Валидируем строку: если Название заполнено, обрабатываем как карточку дома
+                    if (row["Название"] && row["Название"].trim() !== "") {
+                        validCount++;
+                        
+                        const id = row["ID"] ? row["ID"].trim() : `prop-${index}`;
+                        const title = row["Название"].trim();
+                        const type = row["Тип"] ? row["Тип"].trim() : 'Элитный объект';
+                        const description = row["Описание"] ? row["Описание"].trim() : 'Индивидуальное предложение премиум-класса от ведущего брокера столицы.';
+                        const rooms = row["Комнат"] ? row["Комнат"].trim() : '—';
+                        const floor = row["Этаж"] ? row["Этаж"].trim() : '—';
+                        const layout = row["Планировка"] ? row["Планировка"].trim() : 'Индивидуальная';
+                        const ceiling = row["Потолки"] ? row["Потолки"].trim() : '—';
+                        const rawTags = row["Теги"] ? row["Теги"].trim() : '';
+
+                        // Парсинг фото из колонки "Ссылка"
+                        let photos = [];
+                        if (row["Ссылка"]) {
+                            photos = row["Ссылка"].split(',').map(url => url.trim()).filter(url => url.length > 0);
+                        }
+                        // Заглушка, если фотографии отсутствуют
+                        if (photos.length === 0) {
+                            photos = ['https://placehold.co/800x500/F5F6F8/2D2D2D?text=Elena+Premium+Real+Estate'];
+                        }
+
+                        // Слайды карусели
+                        let slidesHtml = '';
+                        photos.forEach((photoUrl, pIdx) => {
+                            const activeClass = pIdx === 0 ? 'active' : '';
+                            slidesHtml += `
+                                <img src="${photoUrl}" 
+                                     onerror="this.src='https://placehold.co/800x500/F5F6F8/2D2D2D?text=Elena+Premium+Real+Estate'" 
+                                     class="carousel-item ${activeClass} absolute inset-0 w-full h-full object-cover" 
+                                     alt="${title} фото ${pIdx + 1}">
+                            `;
+                        });
+
+                        // Стрелки навигации, если фото > 1
+                        let arrowsHtml = '';
+                        if (photos.length > 1) {
+                            arrowsHtml = `
+                                <button class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center text-charcoal shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-20" onclick="moveCarousel('carousel-${id}', -1)">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <button class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center text-charcoal shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-20" onclick="moveCarousel('carousel-${id}', 1)">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            `;
+                        }
+
+                        // Теги/Бейджи
+                        let tagsHtml = '';
+                        if (rawTags) {
+                            const tagsArray = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
+                            tagsArray.forEach(tag => {
+                                tagsHtml += `<span class="bg-white/90 text-charcoal text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-sm font-medium shadow-sm backdrop-blur-sm">${tag}</span>`;
+                            });
+                        } else {
+                            tagsHtml = `<span class="bg-charcoal/90 text-gold text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-sm font-medium shadow-sm backdrop-blur-sm">Эксклюзив</span>`;
+                        }
+
+                        const formattedPrice = formatPrice(row["Цена"]);
+
+                        // Рендерим премиальную карточку
+                        htmlString += `
+                            <div class="group bg-white rounded-xl shadow-sm hover:shadow-2xl transition-shadow duration-500 overflow-hidden reveal">
+                                <div class="relative w-full aspect-[16/10] overflow-hidden bg-pearl" id="carousel-${id}">
+                                    <div class="absolute top-4 left-4 z-20 flex flex-wrap gap-1.5 max-w-[85%]">
+                                        ${tagsHtml}
+                                    </div>
+                                    <div class="carousel-images w-full h-full relative">
+                                        ${slidesHtml}
+                                    </div>
+                                    ${arrowsHtml}
+                                </div>
+                                
+                                <div class="p-8 border border-t-0 border-rose-light/30 rounded-b-xl relative">
+                                    <div class="absolute -top-6 right-6 bg-gold text-white px-4 py-2 sm:px-6 sm:py-3 shadow-lg rounded-sm font-serif text-base sm:text-xl tracking-wide">
+                                        ${formattedPrice}
+                                    </div>
+                                    
+                                    <h3 class="font-serif text-xl sm:text-2xl text-charcoal mb-2 pr-28 sm:pr-32 truncate" title="${title}">${title}</h3>
+                                    <p class="text-charcoal-light text-sm flex items-center gap-2 mb-4">
+                                        <i class="fa-solid fa-location-dot text-gold/70"></i> ${type}
+                                    </p>
+                                    
+                                    <p class="text-charcoal-light text-xs font-light mb-6 line-clamp-3 leading-relaxed">
+                                        ${description}
+                                    </p>
+                                    
+                                    <div class="flex items-center justify-between py-4 border-t border-b border-rose-light/50 mb-6 text-center">
+                                        <div class="w-1/3 border-r border-rose-light/50">
+                                            <p class="text-charcoal font-semibold text-sm sm:text-base">${rooms}</p>
+                                            <p class="text-[9px] uppercase tracking-widest text-charcoal-light">Комнат (эт. ${floor})</p>
+                                        </div>
+                                        <div class="w-1/3 border-r border-rose-light/50 px-1">
+                                            <p class="text-charcoal font-semibold text-sm sm:text-base truncate" title="${layout}">${layout}</p>
+                                            <p class="text-[9px] uppercase tracking-widest text-charcoal-light">Планировка</p>
+                                        </div>
+                                        <div class="w-1/3">
+                                            <p class="text-charcoal font-semibold text-sm sm:text-base">${ceiling}</p>
+                                            <p class="text-[9px] uppercase tracking-widest text-charcoal-light">Потолки</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <button onclick="contactAboutProperty('${title.replace(/'/g, "\\'")}')" class="w-full text-center text-sm font-semibold uppercase tracking-widest text-charcoal hover:text-gold transition-colors py-2 flex items-center justify-center gap-2">
+                                        Узнать подробнее <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } catch (err) {
+                    console.error(`Ошибка разбора строки недвижимости #${index}:`, err);
+                }
+            });
+
+            if (validCount > 0) {
+                container.innerHTML = htmlString;
+            } else {
+                container.innerHTML = `
+                    <div class="col-span-1 md:col-span-2 text-center py-12">
+                        <p class="text-charcoal-light font-light text-sm">В настоящий момент каталог объектов обновляется.</p>
+                    </div>
+                `;
+            }
+
+            // Навешиваем жесты свайпа на новые слайдеры и подключаем анимацию проявления
+            bindCarouselGestures();
+            observeDynamicElements();
+        }
+
+        // --- 5. РЕНДЕР ОТЗЫВОВ КЛИЕНТОВ (Колонки R-V) ---
+        function buildClientReviews(rows) {
+            const container = document.getElementById('reviews-container');
+            if (!container) return;
+
+            let htmlString = '';
+            let validCount = 0;
+
+            rows.forEach((row, index) => {
+                try {
+                    // Обрабатываем строку как отзыв, если заполнено Имя
+                    if (row["Имя"] && row["Имя"].trim() !== "") {
+                        // Проверка на скрытие
+                        const status = row["Статус"] ? row["Статус"].trim().toLowerCase() : '';
+                        if (status === 'скрыть' || status === 'hide') {
+                            return; // Пропускаем скрытый отзыв
+                        }
+
+                        validCount++;
+
+                        const name = row["Имя"].trim();
+                        const position = row["Должность"] ? row["Должность"].trim() : (row["Категория"] ? row["Категория"].trim() : 'Клиент');
+                        const text = row["Текст"] ? row["Текст"].trim() : '';
+                        const rating = parseInt(row["Оценка"], 10) || 5;
+                        const avatar = row["Аватар"] ? row["Аватар"].trim() : '';
+
+                        // Звездный рейтинг
+                        let starsHtml = '';
+                        for (let s = 0; s < 5; s++) {
+                            if (s < rating) {
+                                starsHtml += '<i class="fa-solid fa-star"></i>';
+                            } else {
+                                starsHtml += '<i class="fa-regular fa-star text-gold-light"></i>';
+                            }
+                        }
+
+                        // Аватар
+                        const avatarUrl = avatar !== "" ? avatar : `https://placehold.co/100x100/E8C5C8/2D2D2D?text=${encodeURIComponent(name.charAt(0))}`;
+
+                        htmlString += `
+                            <div class="break-inside-avoid bg-cream p-8 rounded-xl border border-rose-light/40 shadow-sm hover:shadow-lg transition-shadow reveal mb-8 inline-block w-full">
+                                <div class="flex text-gold text-sm mb-4 gap-0.5">
+                                    ${starsHtml}
+                                </div>
+                                <p class="font-serif italic text-base sm:text-lg text-charcoal mb-6 leading-relaxed">
+                                    «${text}»
+                                </p>
+                                <div class="flex items-center gap-4">
+                                    <img src="${avatarUrl}" 
+                                         onerror="this.src='https://placehold.co/100x100/E8C5C8/2D2D2D?text=${encodeURIComponent(name.charAt(0))}'"
+                                         alt="${name}" 
+                                         class="w-12 h-12 rounded-full object-cover border border-gold/30">
+                                    <div>
+                                        <p class="text-sm font-semibold text-charcoal uppercase tracking-wider">${name}</p>
+                                        <p class="text-xs text-charcoal-light">${position}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } catch (err) {
+                    console.error(`Ошибка разбора строки отзыва #${index}:`, err);
+                }
+            });
+
+            if (validCount > 0) {
+                container.innerHTML = htmlString;
+            } else {
+                container.innerHTML = `
+                    <div class="w-full text-center py-12">
+                        <p class="text-charcoal-light font-light text-sm">Отзывы клиентов временно недоступны.</p>
+                    </div>
+                `;
+            }
+
+            observeDynamicElements();
+        }
+
+        // Вывод ошибок при сбое подключения к таблице
+        function renderPlaceholdersOnError() {
+            const catalog = document.getElementById('catalog-container');
+            const reviews = document.getElementById('reviews-container');
+            if (catalog) {
+                catalog.innerHTML = `
+                    <div class="col-span-1 md:col-span-2 text-center py-12 bg-rose-light/10 border border-gold/20 rounded-xl">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl text-gold mb-3"></i>
+                        <p class="text-charcoal font-medium text-base mb-1">Не удалось синхронизировать каталог недвижимости</p>
+                        <p class="text-charcoal-light text-xs">Проверьте доступность Google Таблицы или попробуйте перезагрузить страницу.</p>
+                    </div>
+                `;
+            }
+            if (reviews) {
+                reviews.innerHTML = `
+                    <div class="w-full text-center py-12 bg-rose-light/10 border border-gold/20 rounded-xl">
+                        <p class="text-charcoal-light text-sm">Отзывы временно недоступны.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // --- 6. ЛОГИКА КАУРУСЕЛИ ИЗОБРАЖЕНИЙ ---
+        function moveCarousel(carouselId, direction) {
+            const carousel = document.getElementById(carouselId);
+            if (!carousel) return;
+            const items = carousel.querySelectorAll('.carousel-item');
+            let activeIndex = -1;
+
+            items.forEach((item, index) => {
+                if (item.classList.contains('active')) {
+                    activeIndex = index;
+                    item.classList.remove('active');
+                }
+            });
+
+            if (activeIndex === -1) return;
+
+            let newIndex = activeIndex + direction;
+            if (newIndex >= items.length) newIndex = 0;
+            if (newIndex < 0) newIndex = items.length - 1;
+
+            items[newIndex].classList.add('active');
+        }
+
+        // Мобильные свайпы для каруселей
+        function bindCarouselGestures() {
+            document.querySelectorAll('[id^="carousel-"]').forEach(carousel => {
+                let startX = 0;
+                let endX = 0;
+                
+                // Проверяем, чтобы не навесить события повторно
+                if (carousel.dataset.gesturesBound) return;
+                carousel.dataset.gesturesBound = "true";
+
+                carousel.addEventListener('touchstart', e => {
+                    startX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                carousel.addEventListener('touchend', e => {
+                    endX = e.changedTouches[0].screenX;
+                    handleSwipe(carousel.id);
+                }, { passive: true });
+
+                function handleSwipe(id) {
+                    if (startX - endX > 50) {
+                        moveCarousel(id, 1); // Свайп влево
+                    } else if (endX - startX > 50) {
+                        moveCarousel(id, -1); // Свайп вправо
+                    }
+                }
+            });
+        }
+
+        // Премиальный клик: связаться по объекту в Telegram
+        function contactAboutProperty(propertyName) {
+            const message = `Здравствуйте, Елена!\n\nМеня очень заинтересовал объект "${propertyName}" из вашей авторской коллекции.\n\nРасскажите, пожалуйста, подробнее о наличии, планировках и условиях покупки.`;
+            const encoded = encodeURIComponent(message);
+            window.open(`https://t.me/example_realtor?text=${encoded}`, '_blank');
+        }
+
+        // --- 7. ПЛАВНОЕ ПРОЯВЛЕНИЕ ПРИ СКРОЛЛЕ ---
+        function observeDynamicElements() {
+            const revealOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                });
+            }, revealOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                revealOnScroll.observe(el);
+            });
+        }
+
+        // --- 8. ЛОГИКА ИНТЕРАКТИВНОГО КВИЗА ---
+        let quizState = { budget: '', type: '', location: '' };
+
+        function updateProgress(step) {
+            const bar = document.getElementById('quiz-progress');
+            if (step === 1) bar.style.width = '33%';
+            else if (step === 2) bar.style.width = '66%';
+            else if (step === 3) bar.style.width = '100%';
+        }
+
+        function hideAllSteps() {
+            document.querySelectorAll('.quiz-step').forEach(step => {
+                step.classList.add('hidden');
+                step.classList.remove('animate-fade-in');
+            });
+        }
+
+        function nextStep(currentStep) {
+            if (currentStep === 1) {
+                const checked = document.querySelector('input[name="budget"]:checked');
+                if(checked) quizState.budget = checked.value;
+            } else if (currentStep === 2) {
+                const checked = document.querySelector('input[name="type"]:checked');
+                if(checked) quizState.type = checked.value;
+            } else if (currentStep === 3) {
+                const checked = document.querySelector('input[name="location"]:checked');
+                if(checked) quizState.location = checked.value;
+            }
+
+            setTimeout(() => {
+                hideAllSteps();
+                const next = document.getElementById(`step-${currentStep + 1}`);
+                if (next) {
+                    next.classList.remove('hidden');
+                    next.classList.add('animate-fade-in');
+                    updateProgress(currentStep + 1);
+                }
+
+                if (currentStep === 3) {
+                    generateTelegramLink();
+                }
+            }, 400);
+        }
+
+        function prevStep(currentStep) {
+            hideAllSteps();
+            const prev = document.getElementById(`step-${currentStep}`);
+            if (prev) {
+                prev.classList.remove('hidden');
+                prev.classList.add('animate-fade-in');
+                updateProgress(currentStep);
+            }
+        }
+
+        function generateTelegramLink() {
+            const message = `Здравствуйте, Елена!\n\nЯ заполнил(а) анкету на подбор недвижимости на вашем сайте.\n\nМои предпочтения:\n- Бюджет: ${quizState.budget}\n- Тип недвижимости: ${quizState.type}\n- Локация: ${quizState.location}\n\nБуду рад(а) обсудить закрытые варианты и получить персональную подборку.`;
+            const encodedMessage = encodeURIComponent(message);
+            document.getElementById('telegram-link').href = `https://t.me/example_realtor?text=${encodedMessage}`;
+        }
+
+        function resetQuiz() {
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+            quizState = { budget: '', type: '', location: '' };
+            hideAllSteps();
+            document.getElementById('step-1').classList.remove('hidden');
+            document.getElementById('step-1').classList.add('animate-fade-in');
+            updateProgress(1);
+        }
+    </script>
+</body>
+</html>
