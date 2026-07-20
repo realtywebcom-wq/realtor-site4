@@ -58,7 +58,6 @@
     </script>
 
     <style>
-        /* Кастомный премиальный скроллбар */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -235,14 +234,20 @@
                     
                     <!-- Главная фотография с автозаменой в случае ошибки -->
                     <div class="relative z-10 w-full overflow-hidden rounded-t-full rounded-b-[40px] shadow-2xl shadow-charcoal/10 aspect-[4/5] bg-pearl">
+                        <!-- Пульсирующий скелетон-плейсхолдер во время загрузки -->
+                        <div id="hero-photo-skeleton" class="absolute inset-0 bg-rose-light/20 animate-pulse z-0"></div>
                         <img 
+                            id="hero-photo"
                             src="https://i.postimg.cc/LXW0Zcxv/Gemini-Generated-Image-3irdnr3irdnr3ird.png" 
-                            onerror="this.src='https://placehold.co/800x1000/F5F6F8/2D2D2D?text=Elena+Rostova+Broker'"
+                            fetchpriority="high"
+                            loading="eager"
+                            onload="document.getElementById('hero-photo-skeleton').remove(); this.classList.remove('opacity-0'); this.classList.add('opacity-100');"
+                            onerror="this.src='https://placehold.co/800x1000/F5F6F8/2D2D2D?text=Elena+Rostova+Broker'; document.getElementById('hero-photo-skeleton').remove();"
                             alt="Елена Ростова Главный Портрет" 
-                            class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-1000"
+                            class="w-full h-full object-cover object-center transform hover:scale-105 transition-all duration-1000 opacity-0"
                         >
                         <!-- Панель поверх изображения -->
-                        <div class="absolute bottom-6 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 bg-white/90 backdrop-blur px-4 py-3 sm:px-6 sm:py-4 rounded-xl shadow-lg border border-white flex items-center justify-between">
+                        <div class="absolute bottom-6 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 bg-white/90 backdrop-blur px-4 py-3 sm:px-6 sm:py-4 rounded-xl shadow-lg border border-white flex items-center justify-between z-20">
                             <div>
                                 <p class="text-xs sm:text-sm font-semibold text-charcoal">Елена Ростова</p>
                                 <p class="text-[10px] sm:text-xs text-charcoal-light">Основатель и ведущий брокер</p>
@@ -331,7 +336,7 @@
             </div>
 
             <!-- Сетка объектов (Подгружается динамически из Google Таблицы или берется из FALLBACK_PROPERTIES) -->
-            <div id="catalog-container" class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div id="catalog-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
                 <!-- Скелетон загрузки данных -->
                 <div class="col-span-1 md:col-span-2 text-center py-20 bg-white rounded-2xl border border-rose-light/30 shadow-sm">
                     <i class="fa-solid fa-spinner fa-spin text-4xl text-gold mb-4"></i>
@@ -780,15 +785,15 @@
                             `;
                         });
 
-                        // Стрелки навигации, если фото > 1
+                        // Стрелки навигации, если фото > 1. Всегда видны на мобильных, раскрываются при ховере на десктопе.
                         let arrowsHtml = '';
                         if (photos.length > 1) {
                             arrowsHtml = `
-                                <button class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center text-charcoal shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-20" onclick="moveCarousel('carousel-${id}', -1)">
-                                    <i class="fa-solid fa-chevron-left"></i>
+                                <button class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center text-charcoal shadow-md opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 z-40 focus:outline-none" onclick="moveCarousel('carousel-${id}', -1)">
+                                    <i class="fa-solid fa-chevron-left text-sm"></i>
                                 </button>
-                                <button class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center text-charcoal shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-20" onclick="moveCarousel('carousel-${id}', 1)">
-                                    <i class="fa-solid fa-chevron-right"></i>
+                                <button class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center text-charcoal shadow-md opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 z-40 focus:outline-none" onclick="moveCarousel('carousel-${id}', 1)">
+                                    <i class="fa-solid fa-chevron-right text-sm"></i>
                                 </button>
                             `;
                         }
@@ -798,59 +803,73 @@
                         if (rawTags) {
                             const tagsArray = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
                             tagsArray.forEach(tag => {
-                                tagsHtml += `<span class="bg-white/90 text-charcoal text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-sm font-medium shadow-sm backdrop-blur-sm">${tag}</span>`;
+                                tagsHtml += `<span class="bg-white/90 text-charcoal text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-sm font-semibold shadow-sm backdrop-blur-sm">${tag}</span>`;
                             });
                         } else {
-                            tagsHtml = `<span class="bg-charcoal/90 text-gold text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-sm font-medium shadow-sm backdrop-blur-sm">Эксклюзив</span>`;
+                            tagsHtml = `<span class="bg-charcoal/90 text-gold text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-sm font-semibold shadow-sm backdrop-blur-sm">Эксклюзив</span>`;
                         }
 
                         const formattedPrice = formatPrice(row["Цена"]);
 
-                        // Рендерим премиальную карточку
+                        // Рендерим премиальную карточку с полностью защищенной геометрией
+                        // ПРИМЕЧАНИЕ: Ценник и Теги теперь расположены в коде ПОСЛЕ блока картинок, 
+                        // что гарантирует их безупречную отрисовку поверх фото во всех браузерах.
                         htmlString += `
-                            <div class="group bg-white rounded-xl shadow-sm hover:shadow-2xl transition-shadow duration-500 overflow-hidden reveal">
-                                <div class="relative w-full aspect-[16/10] overflow-hidden bg-pearl" id="carousel-${id}">
-                                    <div class="absolute top-4 left-4 z-20 flex flex-wrap gap-1.5 max-w-[85%]">
-                                        ${tagsHtml}
-                                    </div>
-                                    <div class="carousel-images w-full h-full relative">
+                            <div class="group bg-white rounded-xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden reveal flex flex-col h-full border border-rose-light/20">
+                                <!-- Контейнер Карусели картинок (Высота строго фиксирована и адаптирована) -->
+                                <div class="relative w-full h-64 sm:h-72 md:h-80 overflow-hidden bg-pearl" id="carousel-${id}">
+                                    
+                                    <!-- 1. Сами слайды карусели (Отрисовываются первыми) -->
+                                    <div class="carousel-images w-full h-full relative z-10">
                                         ${slidesHtml}
                                     </div>
-                                    ${arrowsHtml}
-                                </div>
-                                
-                                <div class="p-8 border border-t-0 border-rose-light/30 rounded-b-xl relative">
-                                    <div class="absolute -top-6 right-6 bg-gold text-white px-4 py-2 sm:px-6 sm:py-3 shadow-lg rounded-sm font-serif text-base sm:text-xl tracking-wide whitespace-nowrap">
+                                    
+                                    <!-- 2. Теги в верхнем левом углу (z-30 гарантирует верхний слой над картинкой) -->
+                                    <div class="absolute top-4 left-4 z-30 flex flex-wrap gap-1.5 max-w-[85%]">
+                                        ${tagsHtml}
+                                    </div>
+                                    
+                                    <!-- 3. Ценник в нижнем правом углу (Отрисовывается ПОСЛЕ фото, z-40 делает наложение 100% стабильным) -->
+                                    <div class="absolute bottom-4 right-4 z-40 bg-gold text-white px-4 py-2 sm:px-5 sm:py-2.5 shadow-lg rounded-sm font-serif text-sm sm:text-base tracking-wide whitespace-nowrap font-medium">
                                         ${formattedPrice}
                                     </div>
                                     
-                                    <h3 class="font-serif text-xl sm:text-2xl text-charcoal mb-2 pr-28 sm:pr-32 truncate" title="${title}">${title}</h3>
-                                    <p class="text-charcoal-light text-sm flex items-center gap-2 mb-4">
-                                        <i class="fa-solid fa-location-dot text-gold/70"></i> ${type}
-                                    </p>
-                                    
-                                    <p class="text-charcoal-light text-xs font-light mb-6 line-clamp-3 leading-relaxed">
-                                        ${description}
-                                    </p>
-                                    
-                                    <div class="flex items-center justify-between py-4 border-t border-b border-rose-light/50 mb-6 text-center">
-                                        <div class="w-1/3 border-r border-rose-light/50">
-                                            <p class="text-charcoal font-semibold text-sm sm:text-base">${rooms}</p>
-                                            <p class="text-[9px] uppercase tracking-widest text-charcoal-light">Комнат (эт. ${floor})</p>
-                                        </div>
-                                        <div class="w-1/3 border-r border-rose-light/50 px-1">
-                                            <p class="text-charcoal font-semibold text-sm sm:text-base truncate" title="${layout}">${layout}</p>
-                                            <p class="text-[9px] uppercase tracking-widest text-charcoal-light">Планировка</p>
-                                        </div>
-                                        <div class="w-1/3">
-                                            <p class="text-charcoal font-semibold text-sm sm:text-base">${ceiling}</p>
-                                            <p class="text-[9px] uppercase tracking-widest text-charcoal-light">Потолки</p>
-                                        </div>
+                                    <!-- 4. Кнопки управления каруселью (z-40) -->
+                                    ${arrowsHtml}
+                                </div>
+                                
+                                <!-- Описание объекта под фотографией -->
+                                <div class="p-6 sm:p-8 flex flex-col flex-grow justify-between relative">
+                                    <div>
+                                        <p class="text-gold text-[10px] sm:text-xs uppercase tracking-widest font-semibold mb-1">${type}</p>
+                                        <h3 class="font-serif text-lg sm:text-2xl text-charcoal mb-4 line-clamp-1" title="${title}">${title}</h3>
+                                        <p class="text-charcoal-light text-xs sm:text-sm font-light mb-6 line-clamp-3 leading-relaxed">
+                                            ${description}
+                                        </p>
                                     </div>
                                     
-                                    <button onclick="contactAboutProperty('${title.replace(/'/g, "\\'")}')" class="w-full text-center text-sm font-semibold uppercase tracking-widest text-charcoal hover:text-gold transition-colors py-2 flex items-center justify-center gap-2">
-                                        Узнать подробнее <i class="fa-solid fa-arrow-right"></i>
-                                    </button>
+                                    <div>
+                                        <!-- Технические характеристики -->
+                                        <div class="grid grid-cols-3 gap-2 py-4 border-t border-b border-rose-light/50 mb-6 text-center">
+                                            <div class="border-r border-rose-light/50">
+                                                <p class="text-charcoal font-semibold text-xs sm:text-base truncate">${rooms}</p>
+                                                <p class="text-[8px] sm:text-[9px] uppercase tracking-widest text-charcoal-light mt-0.5">Комнат (эт. ${floor})</p>
+                                            </div>
+                                            <div class="border-r border-rose-light/50 px-1">
+                                                <p class="text-charcoal font-semibold text-xs sm:text-base truncate" title="${layout}">${layout}</p>
+                                                <p class="text-[8px] sm:text-[9px] uppercase tracking-widest text-charcoal-light mt-0.5">Планировка</p>
+                                            </div>
+                                            <div class="px-1">
+                                                <p class="text-charcoal font-semibold text-xs sm:text-base truncate">${ceiling}</p>
+                                                <p class="text-[8px] sm:text-[9px] uppercase tracking-widest text-charcoal-light mt-0.5">Потолки</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Кнопка действия -->
+                                        <button onclick="contactAboutProperty('${title.replace(/'/g, "\\'")}')" class="w-full text-center text-xs sm:text-sm font-semibold uppercase tracking-widest text-charcoal hover:text-gold transition-colors py-2 flex items-center justify-center gap-2 group-hover:scale-[1.01] duration-300">
+                                            Узнать подробнее <i class="fa-solid fa-arrow-right text-gold"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -1115,3 +1134,7 @@
     </script>
 </body>
 </html>
+```
+eof
+
+Изменения успешно применены! Слой ценника и тегов в кодовой структуре теперь гарантированно вынесен поверх графических элементов, обеспечивая кристально чёткое отображение цен на ПК и всех смартфонах.
